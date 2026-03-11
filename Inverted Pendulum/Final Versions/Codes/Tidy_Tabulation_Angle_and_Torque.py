@@ -2,10 +2,10 @@ import pandas as pd
 import numpy as np
 import os
 
-arquivo = r"data/pendulum_dataset.csv"
-saida = r"dataset_projeto0/pendulum_dataset_tidy.csv"
+arquivo = r"Inverted Pendulum/Final Versions/Data/pendulum_dataset_non_ZMP.csv"
+saida = r"Data Processed/pendulum_dataset_tidy.csv"
 
-os.makedirs("dataset_projeto0", exist_ok=True)
+os.makedirs("Data Processed", exist_ok=True)
 
 # =========================
 # Importação
