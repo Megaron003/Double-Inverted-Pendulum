@@ -5,8 +5,8 @@ import csv
 import os
 import time
 
-MODEL_PATH = "double_inverted_pendulum.xml"
-OUTPUT = "data/pendulum_dataset.csv"
+MODEL_PATH = r"C:\Users\Guilherme\Mestrado\Invertede Pendulum\Inverted Pendulum\Final Versions\Models\double_inverted_pendulum.xml"
+OUTPUT = "Data/pendulum_dataset_non_ZMP.csv"
 
 EPISODES = 5
 SIM_TIME = 10
