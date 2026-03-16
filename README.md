@@ -1,18 +1,19 @@
-
-
 # Double Inverted Pendulum
+
+![Python](https://img.shields.io/badge/Python-3.11.9-blue) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
 
 A project dedicated to the analysis, preprocessing, and modeling of the Double Inverted Pendulum system for control, prediction and intelligent control applications.
 
 ---
 
-# The Double Inverted Pendulum Problem
+## The Double Inverted Pendulum Problem
 
 The Double Inverted Pendulum consists of two rigid links connected in series, where the first link is attached to a base and the second link is attached to the end of the first. Both links must be balanced in an upright unstable equilibrium.
 
 Unlike the simple inverted pendulum, the double inverted pendulum presents strong nonlinear behavior and chaotic dynamics, making the system significantly more challenging to analyze and control.
 
-Small variations in initial conditions or disturbances can lead to large differences in system behavior, which makes accurate modeling and control strategies essential.
+Thus, small variations in initial conditions or disturbances can lead to large differences in system behavior, which makes accurate modeling and control strategies essential.
+In the below figure we know what 
 
 
 ## Characteristics of the System
@@ -31,7 +32,7 @@ Because of these characteristics, classical linear control techniques are often 
 
 # Motivation
 
-The main motivation for studying the double inverted pendulum is its importance as a **benchmark problem for advanced control techniques**, including:
+The main motivation for studying the double inverted pendulum is its importance as a benchmark problem for advanced control techniques, including:
 
 * Nonlinear Control
 * Optimal Control
@@ -63,7 +64,7 @@ This project focuses on the following tasks:
 # Repository Structure
 
 ```
-Double-Inverted-Pendulum/
+Double-Inverted-Pendulum
 │
 ├── Inverted Pendulum/
 │   └── Final Versions/
@@ -72,15 +73,37 @@ Double-Inverted-Pendulum/
 │       ├── Data Processed
 │       ├── Graphs
 │       ├── Models
-│       └── Project_1/
+│       │
+│       ├── Project_1/
+│       │   ├── H_1
+│       │   ├── H_2
+│       │   ├── H_3
+│       │   ├── H_4
+│       │   └── H_5
+│       │
+│       ├── Project_2/
+│       │   ├── H_1
+│       │   ├── H_2
+│       │   ├── H_3
+│       │   ├── H_4
+│       │   └── H_5
+│       │
+│       ├── Project_3/
+│       │   ├── H_1
+│       │   ├── H_2
+│       │   ├── H_3
+│       │   ├── H_4
+│       │   └── H_5
+│       │
+│       └── Project_Final/
 │           ├── H_1
 │           ├── H_2
 │           ├── H_3
 │           ├── H_4
 │           └── H_5
-│
-│
-└── README.md
+|
+├── README.md
+|
 ```
 
 ---
