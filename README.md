@@ -1,6 +1,15 @@
 # Double Inverted Pendulum
 
-![Python](https://img.shields.io/badge/Python-3.11.9-blue) [![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+![Python](https://img.shields.io/badge/Python-3.11.9-blue) 
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](LICENSE)
+![Status](https://img.shields.io/badge/Status-Research-green)
+![Visualization](https://img.shields.io/badge/Data-Visualization-red)
+![Data Processing](https://img.shields.io/badge/Data-Preprocessing-purple)
+![Control](https://img.shields.io/badge/Field-Control%20Systems-orange)
+![Time Series](https://img.shields.io/badge/Analysis-Time%20Series-yellow)
+![Nonlinear Systems](https://img.shields.io/badge/Dynamics-Nonlinear-black)
+
+
 
 A project dedicated to the analysis, preprocessing, and modeling of the Double Inverted Pendulum system for control, prediction and intelligent control applications.
 
