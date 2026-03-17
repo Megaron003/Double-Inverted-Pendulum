@@ -117,6 +117,293 @@ Double-Inverted-Pendulum
 
 ---
 
+
+
+## Data-Centric Framework for the Double Inverted Pendulum
+
+---
+
+# Part I — State Variables and Formal System Representation
+
+To perform data acquisition, the system must be simulated in a controlled environment, specifically a high-fidelity physics simulation. For this purpose, the MuJoCo Python library, developed by Google Research, was employed. This approach enables the collection of data corresponding to the variables defined below.
+In practice, the Double Inverted Pendulum is treated strictly as a data-generating nonlinear system, without requiring an explicit analytical solution of its equations of motion. Therefore, the system is defined in terms of its observable state variables:
+
+$$
+\mathbf{x}(t) =
+\begin{bmatrix}
+\theta_1(t) \
+\theta_2(t) \
+\dot{\theta}_1(t) \
+\dot{\theta}_2(t)
+\end{bmatrix}
+$$
+
+where:
+
+* $\theta_1, \theta_2$ — angular positions
+* $\dot{\theta}_1, \dot{\theta}_2$ — angular velocities
+
+Additionally, the system provides **intrinsic dynamic torques**:
+
+$$
+\boldsymbol{\tau}^{dyn}(t) =
+\begin{bmatrix}
+\tau_1(t) \
+\tau_2(t)
+\end{bmatrix}
+$$
+
+and energy-related quantities:
+
+$$
+E(t) = T(t) + V(t)
+$$
+
+---
+
+## Observational Data Structure
+
+At each time step, the system is sampled as:
+
+$$
+\mathcal{D}_t =
+\left{
+\theta_1, \theta_2,
+\dot{\theta}_1, \dot{\theta}_2,
+\tau_1, \tau_2,
+T, V
+\right}
+$$
+
+The dataset is therefore a discrete time series:
+
+$$
+\mathcal{D} = { \mathcal{D}*t }*{t=1}^{N}
+$$
+
+---
+
+## Behavioral Characteristics (Data Perspective)
+
+From a data standpoint, the system exhibits:
+
+* Nonlinearity in state transitions
+* Strong coupling between variables
+* High sensitivity to initial conditions
+* Non-stationary temporal patterns
+
+Thus, multiple simulation episodes are required:
+
+$$
+\mathcal{D} = \bigcup_{k=1}^{K} \mathcal{D}^{(k)}
+$$
+
+where each episode $k$ corresponds to a different initial condition.
+
+---
+
+# Part II — Tidy Data Transformation and Trigonometric Embedding
+
+## Motivation
+
+Angular variables suffer from discontinuities:
+
+$$
+\theta \equiv \theta + 2\pi
+$$
+
+This creates artificial jumps in raw datasets. To address this, the transformation:
+
+$$
+\theta \rightarrow (\sin\theta, \cos\theta)
+$$
+
+is applied.
+
+genui{"math_block_widget_always_prefetch_v2":{"content":"\sin^2(\theta) + \cos^2(\theta) = 1"}}
+
+This embeds angular states into a continuous manifold $S^1$.
+
+---
+
+## Tidy Data Structure
+
+The dataset is reorganized into **tidy format**, where:
+
+* each row = one observation (time step)
+* each column = one variable
+
+The transformed dataset becomes:
+
+$$
+\mathbf{X}_{tidy} =
+\begin{bmatrix}
+\sin\theta_1 & \cos\theta_1 & \sin\theta_2 & \cos\theta_2 & \tau_1 & \tau_2
+\end{bmatrix}
+$$
+
+---
+
+## Importance for Computational Analysis
+
+This transformation enables:
+
+### 1. Geometric Consistency
+
+Eliminates discontinuities in angular representation
+
+### 2. Numerical Stability
+
+Avoids abrupt transitions near $\pm\pi$
+
+### 3. Compatibility with Learning Algorithms
+
+Provides a continuous embedding suitable for:
+
+* regression
+* clustering
+* neural networks
+
+### 4. Enhanced Visualization
+
+Allows phase-space representation without singularities
+
+---
+
+# Part III — Exploratory Data Analysis (EDA) and Nonlinear Dynamics Exploration
+
+## 1. Correlation Matrix
+
+The correlation coefficient is defined as:
+
+$$
+\rho_{ij} =
+\frac{\mathrm{Cov}(X_i, X_j)}{\sigma_i \sigma_j}
+$$
+
+Used to identify **linear dependencies** between:
+
+* angular components
+* trigonometric representations
+* dynamic torques
+
+---
+
+## 2. Phase Space Visualization
+
+The projection:
+
+$$
+(\sin\theta_1, \cos\theta_1)
+$$
+
+represents motion on a circular manifold, enabling:
+
+* detection of periodicity
+* identification of irregular trajectories
+
+---
+
+## 3. Density Estimation
+
+The joint distribution:
+
+$$
+p(\sin\theta_1, \sin\theta_2)
+$$
+
+is approximated via 2D histograms, revealing:
+
+* frequently visited regions
+* attractor structures
+* state concentration zones
+
+---
+
+## 4. Autocorrelation Function
+
+The discrete autocorrelation is given by:
+
+$$
+R(k) =
+\frac{\sum_{t=1}^{N-k} (x_t - \bar{x})(x_{t+k} - \bar{x})}
+{\sum_{t=1}^{N} (x_t - \bar{x})^2}
+$$
+
+This quantifies:
+
+* temporal dependence
+* memory effects
+* characteristic time scales
+
+---
+
+## 5. Cross-Correlation Between States
+
+$$
+R_{xy}(k) = \sum_t x(t)y(t+k)
+$$
+
+Used to evaluate:
+
+* coupling between $\tau_1$ and $\tau_2$
+* interaction between system components
+
+---
+
+## 6. Delay Embedding (Takens Reconstruction)
+
+The time-delay embedding is defined as:
+
+$$
+\mathbf{y}(t) =
+\begin{bmatrix}
+x(t) \
+x(t+\tau) \
+x(t+2\tau)
+\end{bmatrix}
+$$
+
+genui{"math_block_widget_always_prefetch_v2":{"content":"\mathbf{y}(t) = \begin{bmatrix} x(t) \\ x(t+\tau) \\ x(t+2\tau) \end{bmatrix}"}}
+
+This reconstructs the system’s attractor from a single observable.
+
+---
+
+## 7. Dynamic Mapping
+
+The discrete mapping:
+
+$$
+x(t+1) = F(x(t))
+$$
+
+genui{"math_block_widget_always_prefetch_v2":{"content":"x(t+1) = F(x(t))"}}
+
+provides a direct visualization of:
+
+* determinism vs randomness
+* nonlinear structure
+* chaotic signatures
+
+---
+
+## Final Remarks
+
+This project adopts a **data-driven perspective**, where:
+
+* the system is treated as a **black-box nonlinear generator**
+* emphasis is placed on **data structure, transformation, and analysis**
+* no explicit solution of the governing equations is required
+
+This approach is particularly suited for:
+
+* machine learning
+* system identification
+* nonlinear time series analysis
+* data-driven control strategies
+
+
 # Future Work
 
 Future developments of this project may include:
