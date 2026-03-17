@@ -282,12 +282,34 @@ X_{\text{tidy}} =
 \end{bmatrix}
 $$
 
+Tidy data tabulation example whitout angular velocities:
+
+$$
+X_{\text{tidy}} =
+\begin{bmatrix}
+\text{episode} & t & \sin\theta_1 & \cos\theta_1 & \sin\theta_2 & \cos\theta_2 & \tau_1 & \tau_2 \\
+0 & 0.002 & -0.190627 & 0.981663 & -0.064561 & 0.997914 & 2.022249 & 0.619492 \\
+0 & 0.004 & -0.191720 & 0.981450 & -0.063785 & 0.997964 & 2.031079 & 0.620264 \\
+\vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots
+\end{bmatrix}
+$$
+
 To complete variables analyses with angular velocity we have the Tidy below.
 
 $$
 X_{\text{tidy}} =
 \begin{bmatrix}
 \sin(\theta_1) & \cos(\theta_1) & \sin(\theta_2) & \cos(\theta_2) & \omega_1 & \omega_2 & \tau_1 & \tau_2
+\end{bmatrix}
+$$
+
+$$
+X_{\text{tidy}} =
+\begin{bmatrix}
+\text{episode} & t & \sin\theta_1 & \cos\theta_1 & \sin\theta_2 & \cos\theta_2 & \tau_1 & \tau_2 \\
+0 & 0.002 & -0.190627 & 0.981663 & -0.064561 & 0.997914 & 2.022249 & 0.619492 \\
+0 & 0.004 & -0.191720 & 0.981450 & -0.063785 & 0.997964 & 2.031079 & 0.620264 \\
+\vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots
 \end{bmatrix}
 $$
 
@@ -416,7 +438,7 @@ x(t+2\tau)
 \end{bmatrix}
 $$
 
-genui{"math_block_widget_always_prefetch_v2":{"content":"\mathbf{y}(t) = \begin{bmatrix} x(t) \\ x(t+\tau) \\ x(t+2\tau) \end{bmatrix}"}}
+{"\mathbf{y}(t) = \begin{bmatrix} x(t) \\ x(t+\tau) \\ x(t+2\tau) \end{bmatrix}"}}
 
 This reconstructs the system’s attractor from a single observable.
 
