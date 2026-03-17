@@ -177,9 +177,6 @@ $$
 \mathcal{D} = { \mathcal{D}*t }*{t=1}^{N}
 $$
 
----
-
-## Behavioral Characteristics (Data Perspective)
 
 Due to the inherently chaotic nature of the system under study, multiple simulations were conducted within the MuJoCo environment to ensure a sufficiently large and representative dataset. Owing to the system’s sensitivity to initial conditions, each simulation produces distinct trajectories in terms of angular positions, torques, and other relevant variables.
 
@@ -199,6 +196,38 @@ $$
 $$
 
 where each episode $k$ corresponds to a different initial condition.
+
+## Observation: Dynamical Representation and Implicit State Reconstruction
+
+In this project, the Double Inverted Pendulum is treated strictly as a data-generating nonlinear system, where the analysis is conducted based on observable variables rather than explicit analytical formulations. Although angular velocity is not directly included in the dataset, the system’s dynamical behavior remains fully accessible through its temporal structure.
+
+Even in the absence of explicit measurements of $\dot{\theta}$, the time series inherently preserves dynamical information. This is due to the fact that variations between consecutive samples encode motion, allowing derivatives to be approximated through finite differences:
+
+$$
+\dot{\theta}(t) \approx \frac{\theta(t+1) - \theta(t)}{\Delta t}
+$$
+
+Thus, velocity information is implicitly embedded in the evolution of the signal over time. As a consequence, sequences such as $x(t), x(t+1), x(t+2), \dots$ contain sufficient information to approximate local dynamics, since temporal differences act as estimators of derivatives and multi-step dependencies reflect higher-order behavior.
+
+To further exploit this property, delay embedding techniques are employed. By constructing vectors composed of time-delayed observations, it becomes possible to reconstruct the system’s phase space from a single observable:
+
+$$
+\mathbf{y}(t) =
+\begin{bmatrix}
+x(t) \\
+x(t+\tau) \\
+x(t+2\tau)
+\end{bmatrix}
+$$
+
+This transformation enables an implicit reconstruction of the system’s state space. In practice, it allows the recovery of the underlying dynamics typically described by $(\theta, \dot{\theta})$, even though only position-related measurements are explicitly available.
+
+Consequently, the modeling paradigm shifts from an explicit state-space representation to an implicit dynamical reconstruction based solely on temporal correlations. This approach is particularly suitable for nonlinear and chaotic systems, where analytical solutions are often intractable or unnecessary for data-driven analysis.
+
+It is important to note that this reconstruction is indirect and depends on appropriate choices of embedding parameters, such as time delay ($\tau$) and embedding dimension, as well as on data quality factors including sampling rate and noise.
+
+From a practical standpoint, the dataset used in this project does not explicitly include angular velocities; however, it preserves their informational content through temporal dependencies. This justifies the adoption of delay embedding, autocorrelation analysis, and phase-space reconstruction as fundamental tools for exploratory data analysis (EDA) and nonlinear system characterization.
+
 
 ---
 
@@ -220,7 +249,9 @@ $$
 
 is applied.
 
-genui{"math_block_widget_always_prefetch_v2":{"content":"\sin^2(\theta) + \cos^2(\theta) = 1"}}
+$$
+\sin^2{\theta} + \cos^2{\theta} = 1
+$$
 
 This embeds angular states into a continuous manifold $S^1$.
 
@@ -228,19 +259,40 @@ This embeds angular states into a continuous manifold $S^1$.
 
 ## Tidy Data Structure
 
-The dataset is reorganized into **tidy format**, where:
+The dataset is reorganized into a tidy format, where:
 
-* each row = one observation (time step)
-* each column = one variable
+- each row corresponds to a single observation (time step)
+- each column represents a distinct variable
 
-The transformed dataset becomes:
+This structure ensures consistency, interpretability, and compatibility with data analysis and machine learning workflows. In particular, it enables:
+
+- efficient vectorized operations
+- straightforward statistical analysis
+- direct integration with visualization and EDA tools
+- compatibility with learning algorithms that assume tabular input
+
+Additionally, representing angular variables using sine and cosine transformations avoids discontinuities at $2\pi$ and preserves the geometric structure of the state space.
+
+The resulting dataset is defined as:
 
 $$
-\mathbf{X}_{tidy} =
+X_{\text{tidy}} =
 \begin{bmatrix}
-\sin\theta_1 & \cos\theta_1 & \sin\theta_2 & \cos\theta_2 & \tau_1 & \tau_2
+\sin(\theta_1) & \cos(\theta_1) & \sin(\theta_2) & \cos(\theta_2) & \tau_1 & \tau_2
 \end{bmatrix}
 $$
+
+To complete variables analyses with angular velocity we have the Tidy below.
+
+$$
+X_{\text{tidy}} =
+\begin{bmatrix}
+\sin(\theta_1) & \cos(\theta_1) & \sin(\theta_2) & \cos(\theta_2) & \omega_1 & \omega_2 & \tau_1 & \tau_2
+\end{bmatrix}
+$$
+
+
+This representation provides a continuous and numerically stable encoding of angular states, while maintaining a format suitable for both exploratory data analysis (EDA) and data-driven modeling.
 
 ---
 
