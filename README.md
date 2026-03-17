@@ -159,20 +159,16 @@ $$
 E(t) = T(t) + V(t)
 $$
 
----
-
-## Observational Data Structure
-
-At each time step, the system is sampled as:
+Thus at each time step, the system is sampled as:
 
 $$
 \mathcal{D}_t =
-\left{
-\theta_1, \theta_2,
-\dot{\theta}_1, \dot{\theta}_2,
-\tau_1, \tau_2,
-T, V
-\right}
+\begin{bmatrix}
+\theta_1 & \theta_2 &
+\dot{\theta}_1 & \dot{\theta}_2 &
+\tau_1 & \tau_2 &
+T & V
+\end{bmatrix}
 $$
 
 The dataset is therefore a discrete time series:
@@ -184,6 +180,10 @@ $$
 ---
 
 ## Behavioral Characteristics (Data Perspective)
+
+Due to the inherently chaotic nature of the system under study, multiple simulations were conducted within the MuJoCo environment to ensure a sufficiently large and representative dataset. Owing to the system’s sensitivity to initial conditions, each simulation produces distinct trajectories in terms of angular positions, torques, and other relevant variables.
+
+Therefore, performing multiple simulations constitutes the most appropriate approach for data analysis, as it enables the capture of a broader range of possible system behaviors and improves the robustness of subsequent exploratory data analysis (EDA).
 
 From a data standpoint, the system exhibits:
 
