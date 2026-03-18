@@ -6,10 +6,10 @@ import os
 import time
 
 MODEL_PATH = r"C:\Users\Guilherme\Mestrado\Invertede Pendulum\Inverted Pendulum\Final Versions\Models\double_inverted_pendulum.xml"
-OUTPUT = r"Inverted Pendulum\Final Versions\Data\pendulum_dataset_ZMP.csv"
+OUTPUT = r"Inverted Pendulum\Final Versions\Data\pendulum_dataset_non_ZMP_at_Stable_Point.csv"
 
 EPISODES = 5
-SIM_TIME = 0.7
+SIM_TIME = 20
 
 # =========================
 # Carregar modelo
