@@ -2,8 +2,8 @@ import pandas as pd
 import numpy as np
 import os
 
-arquivo = r"Inverted Pendulum/Final Versions/Data/pendulum_dataset_ZMP.csv"
-saida = r"Inverted Pendulum/Final Versions/Data Processed/pendulum_dataset_tidy_ZMP_Velocities.csv"
+arquivo = r"Inverted Pendulum/Final Versions/Data/pendulum_dataset_non_ZMP_at_Stable_Point.csv"
+saida = r"Inverted Pendulum/Final Versions/Data Processed/pendulum_dataset_tidy_non_ZMP_Velocities.csv"
 
 os.makedirs("Data Processed", exist_ok=True)
 
