@@ -285,12 +285,15 @@ $$
 Tidy data tabulation example whitout angular velocities:
 
 $$
-X_{\text{tidy}} =
+X_{\text{original}} =
 \begin{bmatrix}
-\text{episode} & t & \sin\theta_1 & \cos\theta_1 & \sin\theta_2 & \cos\theta_2 & \tau_1 & \tau_2 \\
-0 & 0.002 & -0.190627 & 0.981663 & -0.064561 & 0.997914 & 2.022249 & 0.619492 \\
-0 & 0.004 & -0.191720 & 0.981450 & -0.063785 & 0.997964 & 2.031079 & 0.620264 \\
-\vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots
+\text{episode} & t & \theta_1 & \theta_2 & \omega_1 & \omega_2 & \tau_1 & \tau_2 & E_k & E_p \\
+0 & 0.002 & -0.191800 & -0.064606 & -0.553969 & 0.388218 & 2.022249 & 0.619492 & 0.228798 & 0.0 \\
+0 & 0.004 & -0.192915 & -0.063828 & -0.560330 & 0.389365 & 2.031079 & 0.620264 & 0.232788 & 0.0 \\
+0 & 0.006 & -0.194042 & -0.063048 & -0.566779 & 0.390707 & 2.040025 & 0.621060 & 0.236945 & 0.0 \\
+0 & 0.008 & -0.195182 & -0.062265 & -0.573315 & 0.392243 & 2.049086 & 0.621881 & 0.241272 & 0.0 \\
+0 & 0.010 & -0.196335 & -0.061479 & -0.579940 & 0.393976 & 2.058263 & 0.622725 & 0.245773 & 0.0 \\
+\vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots
 \end{bmatrix}
 $$
 
@@ -306,13 +309,15 @@ $$
 $$
 X_{\text{tidy}} =
 \begin{bmatrix}
-\text{episode} & t & \sin\theta_1 & \cos\theta_1 & \sin\theta_2 & \cos\theta_2 & \tau_1 & \tau_2 \\
-0 & 0.002 & -0.190627 & 0.981663 & -0.064561 & 0.997914 & 2.022249 & 0.619492 \\
-0 & 0.004 & -0.191720 & 0.981450 & -0.063785 & 0.997964 & 2.031079 & 0.620264 \\
-\vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots
+\text{episode} & t & \sin\theta_1 & \cos\theta_1 & \sin\theta_2 & \cos\theta_2 & \omega_1 & \omega_2 & \tau_1 & \tau_2 \\
+0 & 0.002 & -0.190627 & 0.981663 & -0.064561 & 0.997914 & -0.553969 & 0.388218 & 2.022249 & 0.619492 \\
+0 & 0.004 & -0.191720 & 0.981450 & -0.063785 & 0.997964 & -0.560330 & 0.389365 & 2.031079 & 0.620264 \\
+0 & 0.006 & -0.192826 & 0.981233 & -0.063006 & 0.998013 & -0.566779 & 0.390707 & 2.040025 & 0.621060 \\
+0 & 0.008 & -0.193945 & 0.981012 & -0.062225 & 0.998062 & -0.573315 & 0.392243 & 2.049086 & 0.621881 \\
+0 & 0.010 & -0.195076 & 0.980788 & -0.061440 & 0.998111 & -0.579940 & 0.393976 & 2.058263 & 0.622725 \\
+\vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots & \vdots
 \end{bmatrix}
 $$
-
 
 This representation provides a continuous and numerically stable encoding of angular states, while maintaining a format suitable for both exploratory data analysis (EDA) and data-driven modeling.
 
@@ -346,119 +351,237 @@ Allows phase-space representation without singularities
 
 # Part III — Exploratory Data Analysis (EDA) and Nonlinear Dynamics Exploration
 
-## 1. Correlation Matrix
+# Nonlinear Dynamical Analysis of a Double Inverted Pendulum
 
-The correlation coefficient is defined as:
+## 1. Overview
 
-$$
-\rho_{ij} =
-\frac{\mathrm{Cov}(X_i, X_j)}{\sigma_i \sigma_j}
-$$
+This work presents a comprehensive nonlinear analysis pipeline applied to a **double inverted pendulum system**, focusing on:
 
-Used to identify **linear dependencies** between:
+- Stability assessment via **Lyapunov functions**
+- Estimation of **Lyapunov exponents**
+- Phase space reconstruction using **Takens' embedding theorem**
+- Temporal dependency analysis through **Mutual Information**
+- Characterization of chaotic behavior via **Finite-Time Lyapunov Exponents (FTLE)**
 
-* angular components
-* trigonometric representations
-* dynamic torques
-
----
-
-## 2. Phase Space Visualization
-
-The projection:
-
-$$
-(\sin\theta_1, \cos\theta_1)
-$$
-
-represents motion on a circular manifold, enabling:
-
-* detection of periodicity
-* identification of irregular trajectories
+The methodology operates over multiple simulation episodes, extracting both local and global dynamical properties.
 
 ---
 
-## 3. Density Estimation
+## 2. Data Structure and Preprocessing
 
-The joint distribution:
+The dataset consists of time-series measurements of the system states:
+
+- Angular representations:
+  - $\sin(\theta_1)$, $\cos(\theta_1)$
+  - $\sin(\theta_2)$, $\cos(\theta_2)$
+- Angular velocities:
+  - $\omega_1$, $\omega_2$
+- Time: $t$
+
+### 2.1 Angle Reconstruction
+
+To recover the angular variable:
 
 $$
-p(\sin\theta_1, \sin\theta_2)
+\theta_1 = \text{atan2}(\sin(\theta_1), \cos(\theta_1))
 $$
 
-is approximated via 2D histograms, revealing:
+A normalization step is applied:
 
-* frequently visited regions
-* attractor structures
-* state concentration zones
+$$
+\theta_1^{norm} = \frac{\theta_1 - \mu}{\sigma}
+$$
+
+where $\mu$ and $\sigma$ are the mean and standard deviation, respectively.
 
 ---
 
-## 4. Autocorrelation Function
+## 3. Lyapunov-Based Energy Analysis
 
-The discrete autocorrelation is given by:
+A candidate **Lyapunov function** is defined as:
 
 $$
-R(k) =
-\frac{\sum_{t=1}^{N-k} (x_t - \bar{x})(x_{t+k} - \bar{x})}
-{\sum_{t=1}^{N} (x_t - \bar{x})^2}
+V(t) = \frac{1}{2}(\omega_1^2 + \omega_2^2) + k_1 (1 - \cos(\theta_1)) + k_2 (1 - \cos(\theta_2))
 $$
 
-This quantifies:
+This formulation combines:
 
-* temporal dependence
-* memory effects
-* characteristic time scales
+- Kinetic energy
+- Potential energy-like terms derived from angular displacement
+
+### 3.1 Time Derivative
+
+The temporal derivative is approximated numerically:
+
+$$
+\dot{V}(t) = \frac{dV}{dt}
+$$
+
+This allows assessing system stability:
+- $\dot{V}(t) < 0$ → stable behavior
+- $\dot{V}(t) > 0$ → energy growth / instability
 
 ---
 
-## 5. Cross-Correlation Between States
+## 4. Mutual Information and Time Delay Selection
+
+To reconstruct the phase space, an appropriate time delay $\tau$ is required.
+
+### 4.1 Mutual Information
+
+The mutual information between $x(t)$ and $x(t+\tau)$ is computed:
 
 $$
-R_{xy}(k) = \sum_t x(t)y(t+k)
+I(\tau) = \sum_{i,j} P_{ij} \log \left( \frac{P_{ij}}{P_i P_j} \right)
 $$
 
-Used to evaluate:
+The optimal delay $\tau$ is selected as:
 
-* coupling between $\tau_1$ and $\tau_2$
-* interaction between system components
+- The **first local minimum**, or
+- The **global minimum**, if no local minimum is found
 
 ---
 
-## 6. Delay Embedding (Takens Reconstruction)
+## 5. Phase Space Reconstruction (Takens Embedding)
 
-The time-delay embedding is defined as:
+Using Takens' theorem, the system is embedded in a higher-dimensional space:
 
 $$
-\mathbf{y}(t) =
+\mathbf{x}(t) =
 \begin{bmatrix}
-x(t) \
-x(t+\tau) \
+x(t) \\
+x(t+\tau) \\
 x(t+2\tau)
 \end{bmatrix}
 $$
 
-{"\mathbf{y}(t) = \begin{bmatrix} x(t) \\ x(t+\tau) \\ x(t+2\tau) \end{bmatrix}"}}
-
-This reconstructs the system’s attractor from a single observable.
+This enables reconstruction of the **attractor geometry** from scalar observations.
 
 ---
 
-## 7. Dynamic Mapping
+## 6. State Space Representation
 
-The discrete mapping:
+The full system state is defined as:
 
 $$
-x(t+1) = F(x(t))
+\mathbf{s}(t) =
+\begin{bmatrix}
+\cos(\theta_1), \sin(\theta_1),
+\cos(\theta_2), \sin(\theta_2),
+\omega_1, \omega_2
+\end{bmatrix}
 $$
 
-genui{"math_block_widget_always_prefetch_v2":{"content":"x(t+1) = F(x(t))"}}
+This representation ensures:
 
-provides a direct visualization of:
+- Continuity
+- Preservation of angular periodicity
+- Suitability for nonlinear analysis
 
-* determinism vs randomness
-* nonlinear structure
-* chaotic signatures
+---
+
+## 7. Lyapunov Exponent Estimation
+
+### 7.1 Trajectory Divergence
+
+For nearby trajectories:
+
+$$
+d(k) = \| \mathbf{s}_i(k) - \mathbf{s}_j(k) \|
+$$
+
+The logarithmic divergence is accumulated:
+
+$$
+\ln d(k)
+$$
+
+---
+
+### 7.2 Finite-Time Lyapunov Exponent (FTLE)
+
+The FTLE is defined as:
+
+$$
+\lambda(k) = \frac{\ln d(k)}{k}
+$$
+
+This provides a time-dependent estimate of system sensitivity.
+
+---
+
+## 8. Linear Region Identification
+
+To estimate the **largest Lyapunov exponent**, a linear fit is applied:
+
+$$
+\ln d(k) \approx \lambda k + b
+$$
+
+The optimal region is selected by maximizing the coefficient of determination:
+
+$$
+R^2 = 1 - \frac{\sum (y - \hat{y})^2}{\sum (y - \bar{y})^2}
+$$
+
+The slope $\lambda$ corresponds to the **Lyapunov exponent**.
+
+---
+
+## 9. Interpretation of Results
+
+- $\lambda > 0$ → Chaotic dynamics (sensitive dependence on initial conditions)
+- $\lambda = 0$ → Marginal stability
+- $\lambda < 0$ → Stable system
+
+---
+
+## 10. Output Structure
+
+The pipeline generates:
+
+- Lyapunov function plots: $V(t)$ and $\dot{V}(t)$
+- Mutual Information curves
+- Takens attractors (3D)
+- FTLE evolution
+- Log-divergence plots with linear fit
+
+Each result is organized per episode in structured directories.
+
+---
+
+## 11. Global Statistical Analysis
+
+Across all episodes:
+
+$$
+\bar{\lambda} = \frac{1}{N} \sum_{i=1}^{N} \lambda_i
+$$
+
+$$
+\sigma_\lambda = \sqrt{\frac{1}{N} \sum (\lambda_i - \bar{\lambda})^2}
+$$
+
+These metrics provide a **global characterization of system stability**.
+
+---
+
+## 12. Conclusion
+
+This pipeline integrates:
+
+- Nonlinear dynamics
+- Information theory
+- Stability theory
+- Chaos analysis
+
+to provide a robust framework for analyzing and characterizing the behavior of a double inverted pendulum system.
+
+The approach is particularly suitable for:
+
+- Reinforcement Learning validation
+- Control system design
+- Detection of chaotic regimes
 
 ---
 
