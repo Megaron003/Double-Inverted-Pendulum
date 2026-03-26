@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import os
 
-arquivo = r"data_IA_process/pendulum_ai_dataset.csv"
+arquivo = r"C:\Users\Guilherme\Mestrado\Invertede Pendulum\Inverted Pendulum\Final Versions\Data Processed\pendulum_dataset_tidy_non_ZMP_Velocities.csv"
 pasta_saida = "IA_graficos_episodios"
 
 # cria a pasta se não existir
