@@ -6,6 +6,7 @@ import torch.optim as optim
 from torch.utils.data import DataLoader, TensorDataset
 from sklearn.model_selection import train_test_split
 import matplotlib.pyplot as plt
+import joblib
 
 # Carregar os dados
 df = pd.read_csv(r'C:\Users\Guilherme\Mestrado\Invertede Pendulum\Inverted Pendulum\Final Versions\Data Processed\pendulum_dataset_tidy_non_ZMP_Velocities.csv')
@@ -166,3 +167,11 @@ plt.plot(y_pred_orig[:100,1], label='Predito tau2')
 plt.legend()
 plt.title('tau2')
 plt.show()
+
+# SALVAR MODELO E SCALERS
+torch.save(model.state_dict(), "pendulum_model.pth")
+
+joblib.dump(scaler_X, "scaler_X.pkl")
+joblib.dump(scaler_y, "scaler_y.pkl")
+
+print("\nModelo e scalers salvos com sucesso!")
