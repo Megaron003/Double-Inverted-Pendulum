@@ -1,0 +1,2 @@
+E_inicial,E_final,dissipacao_total,dissipacao_pct,dE_por_passo_media,dE_por_passo_std,n_saltos_anomalos,salto_maximo,dissipacao_consistente
+9.81085835557884,9.810730253263099,0.00012810231574178488,0.0013057197555904052,-2.562558826601018e-08,1.7184449573060016e-08,0,0.0,SIM
