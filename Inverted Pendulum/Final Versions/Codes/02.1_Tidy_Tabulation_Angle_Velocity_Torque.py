@@ -1,47 +1,48 @@
 import pandas as pd
 import numpy as np
-import os
-
-arquivo = r"Inverted Pendulum/Final Versions/Data/pendulum_dataset_non_ZMP_at_Stable_Point.csv"
-saida = r"Inverted Pendulum/Final Versions/Data Processed/pendulum_dataset_tidy_non_ZMP_Velocities.csv"
-
-os.makedirs("Data Processed", exist_ok=True)
 
 # =========================
-# Importação
+# Caminhos
+# =========================
+arquivo = r"Inverted Pendulum/Final Versions/Data Processed/pendulum_dataset_tidy_non_ZMP_Velocities.csv"
+saida = r"Inverted Pendulum/Final Versions/Data Processed/pendulum_dataset_tidy_with_acceleration.csv"
+
+# =========================
+# Leitura
 # =========================
 df = pd.read_csv(arquivo)
 
-print("Estrutura original:")
+print("Dataset original:")
 print(df.head())
 
 # =========================
-# Construção do dataset tidy
+# Remover coluna de energia cinética (se existir)
 # =========================
-tidy = pd.DataFrame()
+if "kinetic_energy" in df.columns:
+    df = df.drop(columns=["kinetic_energy"])
 
-tidy["episode"] = df["episode"]
-tidy["time"] = df["time"]
+# =========================
+# Ordenar (IMPORTANTE)
+# =========================
+df = df.sort_values(by=["episode", "time"])
 
-# representação trigonométrica
-tidy["sin_theta1"] = np.sin(df["theta1"])
-tidy["cos_theta1"] = np.cos(df["theta1"])
+# =========================
+# Calcular acelerações angulares
+# =========================
+df["angle_accel1"] = df.groupby("episode")["omega1"].diff() / df.groupby("episode")["time"].diff()
+df["angle_accel2"] = df.groupby("episode")["omega2"].diff() / df.groupby("episode")["time"].diff()
 
-tidy["sin_theta2"] = np.sin(df["theta2"])
-tidy["cos_theta2"] = np.cos(df["theta2"])
+# =========================
+# Remover NaNs (primeira linha de cada episódio)
+# =========================
+df = df.dropna().reset_index(drop=True)
 
-# velocidades angulares (já existentes)
-tidy["omega1"] = df["omega1"]
-tidy["omega2"] = df["omega2"]
+# =========================
+# Salvar
+# =========================
+df.to_csv(saida, index=False)
 
-# torques
-tidy["tau1_dynamics"] = df["tau1_dynamics"]
-tidy["tau2_dynamics"] = df["tau2_dynamics"]
+print("\nDataset com aceleração:")
+print(df.head())
 
-# salvar dataset
-tidy.to_csv(saida, index=False)
-
-print("\nDataset tidy criado:")
-print(tidy.head())
-
-print("\nDataset salvo em:", saida)
+print("\nArquivo salvo em:", saida)
