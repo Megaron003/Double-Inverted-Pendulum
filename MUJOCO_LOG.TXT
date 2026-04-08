@@ -1,0 +1,24 @@
+Mon Mar 30 01:15:13 2026
+WARNING: mju_openResource: unknown file 'pendulum.xml'
+
+Mon Mar 30 02:01:01 2026
+ERROR: mjv_updateSceneState: m->nu changed
+
+Mon Mar 30 02:25:38 2026
+WARNING: mju_openResource: unknown file 'model_acrobot.xml'
+
+Mon Mar 30 02:27:58 2026
+WARNING: mju_openResource: unknown file 'model_acrobot.xml'
+
+Mon Mar 30 02:32:12 2026
+WARNING: mju_openResource: unknown file 'model_acrobot.xml'
+
+Mon Mar 30 02:36:55 2026
+WARNING: mju_openResource: unknown file 'C:\Users\Guilherme\Mestrado\Invertede Pendulum\Inverted Pendulum\Final Versions\Project_Final\Acrobot\MuJoCo\model_double_inverted_pendulum.xml'
+
+Mon Mar 30 02:37:25 2026
+WARNING: mju_openResource: unknown file 'model_acrobot.xml'
+
+Mon Mar 30 02:38:57 2026
+WARNING: mju_openResource: unknown file 'C:\Users\Guilherme\Mestrado\Invertede Pendulum\Inverted Pendulum\Final Versions\Project_Final\Acrobot\MuJoCo\model_double_inverted_pendulum.xml'
+

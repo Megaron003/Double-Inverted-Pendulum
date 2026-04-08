@@ -1,0 +1,30 @@
+<mujoco model="acrobot">
+
+  <option gravity="0 0 -9.81" timestep="0.005"/>
+
+  <default>
+    <joint damping="0"/>
+  </default>
+
+  <worldbody>
+    <body pos="0 0 1">
+
+      <joint name="theta1" type="hinge" axis="0 1 0"/>
+
+      <body pos="0 0 0">
+        <geom type="capsule" fromto="0 0 0 0 0 -1" size="0.05"/>
+
+        <body pos="0 0 -1">
+          <joint name="theta2" type="hinge" axis="0 1 0"/>
+          <geom type="capsule" fromto="0 0 0 0 0 -1" size="0.05"/>
+        </body>
+
+      </body>
+    </body>
+  </worldbody>
+
+  <actuator>
+    <motor joint="theta1" ctrlrange="-1 1" gear="200"/>
+  </actuator>
+
+</mujoco>

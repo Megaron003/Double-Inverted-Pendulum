@@ -1,0 +1,27 @@
+<mujoco model="double_inverted_pendulum">
+    <option gravity="0 0 -9.81" timestep="0.01"/>
+
+    <worldbody>
+        <!-- Base -->
+        <body name="cart" pos="0 0 0">
+            <joint name="slider" type="slide" axis="1 0 0"/>
+
+            <!-- Link 1 -->
+            <body name="link1" pos="0 0 0">
+                <joint name="hinge1" type="hinge" axis="0 1 0"/>
+                <geom type="capsule" fromto="0 0 0 0 0 1" size="0.05"/>
+
+                <!-- Link 2 -->
+                <body name="link2" pos="0 0 1">
+                    <joint name="hinge2" type="hinge" axis="0 1 0"/>
+                    <geom type="capsule" fromto="0 0 0 0 0 1" size="0.05"/>
+                </body>
+            </body>
+        </body>
+    </worldbody>
+
+    <actuator>
+        <!-- ATUADOR SOMENTE NA BASE -->
+        <motor joint="slider" ctrlrange="-10 10" gear="100"/>
+    </actuator>
+</mujoco>
