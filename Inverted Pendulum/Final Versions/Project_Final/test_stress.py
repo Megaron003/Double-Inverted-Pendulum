@@ -4,7 +4,6 @@ import mujoco
 import mujoco.viewer
 import time
 import random
-import msvcrt   # Windows apenas
 
 # -------------------------------------------------------------------
 # Configurações
@@ -16,8 +15,8 @@ action_dim = 2
 device = torch.device("cpu")
 
 # Intervalos de randomização
-THETA_RANGE = (-1, 1)      # radianos (≈ -57° a 57°)
-OMEGA_RANGE = (-1.0, 1.0)      # rad/s
+THETA_RANGE = (-2.0, 2.0)      # radianos (≈ -115° a 115°)
+OMEGA_RANGE = (-3.0, 3.0)      # rad/s
 
 # -------------------------------------------------------------------
 # Carregar modelo MuJoCo e política
@@ -46,29 +45,22 @@ def get_obs(data):
 # Randomizar estado inicial (ângulos e velocidades)
 # -------------------------------------------------------------------
 def randomize_state():
+    # Ângulos aleatórios dentro do intervalo definido
     data.qpos[0] = random.uniform(*THETA_RANGE)
     data.qpos[1] = random.uniform(*THETA_RANGE)
+    # Velocidades angulares aleatórias
     data.qvel[0] = random.uniform(*OMEGA_RANGE)
     data.qvel[1] = random.uniform(*OMEGA_RANGE)
+    # Atualiza as estruturas internas do MuJoCo
     mujoco.mj_forward(model, data)
-    print(f"Randomizado: θ1={data.qpos[0]:.2f} rad, θ2={data.qpos[1]:.2f} rad, "
-          f"ω1={data.qvel[0]:.2f} rad/s, ω2={data.qvel[1]:.2f} rad/s")
 
 # -------------------------------------------------------------------
-# Reset da simulação (chamado no início e a cada queda ou tecla 'r')
+# Reset da simulação (chamado no início e a cada queda)
 # -------------------------------------------------------------------
 def reset():
     randomize_state()
-    print("Simulação reiniciada com novo estado aleatório.")
-
-# -------------------------------------------------------------------
-# Verificar tecla 'r' pressionada (não bloqueante)
-# -------------------------------------------------------------------
-def key_pressed():
-    if msvcrt.kbhit():
-        key = msvcrt.getch()
-        return key in (b'r', b'R')
-    return False
+    print(f"Novo estado: θ1={data.qpos[0]:.2f} rad, θ2={data.qpos[1]:.2f} rad, "
+          f"ω1={data.qvel[0]:.2f} rad/s, ω2={data.qvel[1]:.2f} rad/s")
 
 # -------------------------------------------------------------------
 # Execução com visualizador
@@ -76,17 +68,9 @@ def key_pressed():
 with mujoco.viewer.launch_passive(model, data) as viewer:
     reset()
     step = 0
-    print("Simulação iniciada. Pressione 'r' para reiniciar manualmente com estado aleatório.")
-    print("Feche a janela do visualizador para encerrar.")
+    print("Simulação iniciada. Feche a janela do visualizador para encerrar.")
 
     while viewer.is_running():
-        # Verifica se tecla 'r' foi pressionada
-        if key_pressed():
-            reset()
-            step = 0
-            # Pequena pausa para evitar múltiplos resets consecutivos
-            time.sleep(0.2)
-
         # 1. Obter observação atual
         obs = get_obs(data)
         obs_t = torch.tensor(obs, dtype=torch.float32, device=device).unsqueeze(0)
@@ -109,11 +93,10 @@ with mujoco.viewer.launch_passive(model, data) as viewer:
         theta1 = data.qpos[0]
         theta2 = data.qpos[1]
         if abs(theta1) > 1.0 or abs(theta2) > 1.0:
-            print(f"Queda após {step} passos. Reiniciando automaticamente...")
+            print(f"Queda após {step} passos. Reiniciando com novo estado aleatório...")
             reset()
             step = 0
-            # Pequena pausa para não resetar instantaneamente
-            time.sleep(0.5)
+            time.sleep(0.5)   # pausa para não reiniciar instantaneamente
         else:
             step += 1
 
