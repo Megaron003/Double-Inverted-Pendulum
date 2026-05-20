@@ -1,4 +1,5 @@
 # Validação de HN-B — A Não-Linearidade é Trigonométrica?
+
 ## Pêndulo Invertido Duplo
 
 ---
@@ -7,7 +8,7 @@
 
 ### 1.1 Contexto — o que HN-B acrescenta a H2
 
-H2 já confirmou que a dinâmica não é linear (RESET potência 3, F = 724,
+H3 já confirmou que a dinâmica não é linear (RESET potência 3, F = 724,
 p ≈ 0). HN-B vai além: qual é a **classe funcional** da não-linearidade?
 A resposta determina diretamente qual função de ativação a rede deve usar.
 
@@ -16,30 +17,46 @@ A distinção central é entre dois tipos de estrutura funcional:
 **Trigonométrica / ímpar:** sin(θ), cos(θ), θ·ω — funções de ordem
 ímpar em θ centrado em zero. Expandidas em série de Taylor:
 
-$$\sin(\theta) = \theta - \frac{\theta^3}{3!} + \frac{\theta^5}{5!} - \cdots
-\quad \text{(apenas potências ímpares)}$$
+$$
+\sin(\theta) = \theta - \frac{\theta^3}{3!} + \frac{\theta^5}{5!} - \cdots
+\quad \text{(apenas potências ímpares)}
+$$
 
 **Polinomial / par:** θ², ω², θ·θⱼ — funções de ordem par. Expandidas:
 
-$$\theta^2, \;\theta^4, \;\theta^2\omega^2, \;\ldots
-\quad \text{(apenas potências pares)}$$
+$$
+\theta^2, \;\theta^4, \;\theta^2\omega^2, \;\ldots
+\quad \text{(apenas potências pares)}
+$$
 
 A distinção par/ímpar é a chave porque a função de ativação tanh tem
 exatamente a expansão de Taylor da forma ímpar:
 
-$$\tanh(z) = z - \frac{z^3}{3} + \frac{2z^5}{15} - \cdots
-\quad \text{(apenas potências ímpares)}$$
+$$
+\tanh(z) = z - \frac{z^3}{3} + \frac{2z^5}{15} - \cdots
+\quad \text{(apenas potências ímpares)}
+$$
 
 Enquanto ReLU gera representações lineares por partes — úteis para
 aproximar funções par, mas incapazes de representar sin(θ) exatamente.
 
 ### 1.2 Hipóteses formais
 
-$$H_0:\; \text{a estrutura omitida pelo modelo linear é polinomial (par em } \theta\text{)}$$
-$$\quad \Rightarrow \text{ RESET potência 2 rejeita } H_0 \text{, potência 3 não acrescenta}$$
+$$
+H_0:\; \text{a estrutura omitida pelo modelo linear é polinomial (par em } \theta\text{)}
+$$
 
-$$H_1:\; \text{a estrutura omitida é trigonométrica/ímpar } (\sin\theta,\, \cos\theta,\, \theta\cdot\omega)$$
-$$\quad \Rightarrow \text{ RESET potência 2 NÃO rejeita, potência 3 rejeita}$$
+$$
+\quad \Rightarrow \text{ RESET potência 2 rejeita } H_0 \text{, potência 3 não acrescenta}
+$$
+
+$$
+H_1:\; \text{a estrutura omitida é trigonométrica/ímpar } (\sin\theta,\, \cos\theta,\, \theta\cdot\omega)
+$$
+
+$$
+\quad \Rightarrow \text{ RESET potência 2 NÃO rejeita, potência 3 rejeita}
+$$
 
 ### 1.3 Três testes encadeados
 
@@ -47,12 +64,19 @@ $$\quad \Rightarrow \text{ RESET potência 2 NÃO rejeita, potência 3 rejeita}$
 
 O RESET de Ramsey aumenta o modelo com potências dos valores ajustados:
 
-$$M_{\text{p}=2}: \quad \alpha_i = f(\mathbf{x}) + \gamma_2 \hat\alpha^2 + \varepsilon$$
-$$M_{\text{p}=3}: \quad \alpha_i = f(\mathbf{x}) + \gamma_2 \hat\alpha^2 + \gamma_3 \hat\alpha^3 + \varepsilon$$
+$$
+M_{\text{p}=2}: \quad \alpha_i = f(\mathbf{x}) + \gamma_2 \hat\alpha^2 + \varepsilon
+$$
+
+$$
+M_{\text{p}=3}: \quad \alpha_i = f(\mathbf{x}) + \gamma_2 \hat\alpha^2 + \gamma_3 \hat\alpha^3 + \varepsilon
+$$
 
 A estatística F testa $H_0: \gamma_k = 0$ para cada potência:
 
-$$F = \frac{(RSS_0 - RSS_{\text{aug}})/q}{RSS_{\text{aug}}/(n-k-q)} \sim F(q,\, n-k-q)$$
+$$
+F = \frac{(RSS_0 - RSS_{\text{aug}})/q}{RSS_{\text{aug}}/(n-k-q)} \sim F(q,\, n-k-q)
+$$
 
 $\hat\alpha^2$ é um termo **par** — ortogonal à estrutura sin(θ) (ímpar).
 $\hat\alpha^3$ é um termo **ímpar** — captura a estrutura trigonométrica.
@@ -65,22 +89,30 @@ Se $p=2$ não rejeita mas $p=3$ rejeita: assinatura diagnóstica de
 Regride-se os resíduos do modelo linear diretamente sobre dois conjuntos
 de termos candidatos, medindo $R^2_{\text{aux}}$ de cada um:
 
-$$r_i = \delta_0 + \delta_1\sin\theta_1 + \delta_2\cos\theta_1 + \delta_3\sin\theta_2 +
-\delta_4\cos\theta_2 + \delta_5(\theta_1\omega_1) + \delta_6(\theta_2\omega_2) + \varepsilon$$
+$$
+r_i = \delta_0 + \delta_1\sin\theta_1 + \delta_2\cos\theta_1 + \delta_3\sin\theta_2 +
+\delta_4\cos\theta_2 + \delta_5(\theta_1\omega_1) + \delta_6(\theta_2\omega_2) + \varepsilon
+$$
 
-$$r_i = \eta_0 + \eta_1\theta_1^2 + \eta_2\theta_2^2 + \eta_3\omega_1^2 +
-\eta_4\omega_2^2 + \eta_5(\theta_1\theta_2) + \eta_6(\omega_1\omega_2) + \varepsilon$$
+$$
+r_i = \eta_0 + \eta_1\theta_1^2 + \eta_2\theta_2^2 + \eta_3\omega_1^2 +
+\eta_4\omega_2^2 + \eta_5(\theta_1\theta_2) + \eta_6(\omega_1\omega_2) + \varepsilon
+$$
 
 **Teste 3 — F-parcial aninhado**
 
 Combina os dois conjuntos em um modelo com todos os 12 termos e testa
 a contribuição incremental de cada conjunto dado o outro:
 
-$$H_0^{(A)}:\; \beta_{\sin,\cos,\theta\omega} = 0 \;\text{ dado poly} \quad
-\rightarrow F(trig \mid poly) \sim F(6,\, n-13)$$
+$$
+H_0^{(A)}:\; \beta_{\sin,\cos,\theta\omega} = 0 \;\text{ dado poly} \quad
+\rightarrow F(trig \mid poly) \sim F(6,\, n-13)
+$$
 
-$$H_0^{(B)}:\; \beta_{\theta^2,\omega^2,...} = 0 \;\text{ dado trig} \quad
-\rightarrow F(poly \mid trig) \sim F(6,\, n-13)$$
+$$
+H_0^{(B)}:\; \beta_{\theta^2,\omega^2,...} = 0 \;\text{ dado trig} \quad
+\rightarrow F(poly \mid trig) \sim F(6,\, n-13)
+$$
 
 ---
 
@@ -88,31 +120,31 @@ $$H_0^{(B)}:\; \beta_{\theta^2,\omega^2,...} = 0 \;\text{ dado trig} \quad
 
 ### 2.1 Teste 1 — RESET potência 2 vs 3
 
-| Variável | RESET p=2   |  p-valor  |   Decisão (α=0,05)   | RESET p=3    |  p-valor  |   Decisão   |
-|----------|-------------|-----------|----------------------|--------------|-----------|-------------|
-| α₁       | F =   1,15  |   0,2843  | Não rejeita H₀  ✗   | F = 724,14   |   ≈ 0     | Rejeita ✓  |
-| α₂       | F =   2,43  |   0,1188  | Não rejeita H₀  ✗   | F = 4131,15  |   ≈ 0     | Rejeita ✓  |
+| Variável | RESET p=2  | p-valor | Decisão (α=0,05)   | RESET p=3   | p-valor | Decisão   |
+| --------- | ---------- | ------- | -------------------- | ----------- | ------- | ---------- |
+| α₁      | F =   1,15 | 0,2843  | Não rejeita H₀  ✗ | F = 724,14  | ≈ 0    | Rejeita ✓ |
+| α₂      | F =   2,43 | 0,1188  | Não rejeita H₀  ✗ | F = 4131,15 | ≈ 0    | Rejeita ✓ |
 
 **Assinatura diagnóstica:** p=2 não rejeita + p=3 rejeita = não-linearidade de natureza ímpar.
 
 ### 2.2 Teste 2 — R² da regressão auxiliar
 
-| Conjunto de termos        |   R²_aux (α₁)  |   R²_aux (α₂)  |
-|---------------------------|----------------|----------------|
-| Trigonométrico (sin/cos/θω)| 0,0900         | 0,1029         |
-| Polinomial (θ², ω², θθ, ωω)| 0,0021         | 0,0028         |
-| Combinado (trig + poly)   | 0,0929         | 0,1072         |
-| Razão trig / poly         | 42×            | 37×            |
+| Conjunto de termos                  | R²_aux (α₁) | R²_aux (α₂) |
+| ----------------------------------- | -------------- | -------------- |
+| Trigonométrico (sin/cos/θω)      | 0,0900         | 0,1029         |
+| Polinomial (θ², ω², θθ, ωω) | 0,0021         | 0,0028         |
+| Combinado (trig + poly)             | 0,0929         | 0,1072         |
+| Razão trig / poly                  | 42×           | 37×           |
 
 Os termos trigonométricos explicam **42× mais** variância dos resíduos do
 que os termos polinomiais em α₁, e **37×** em α₂.
 
 ### 2.3 Teste 3 — F-parcial aninhado
 
-| Hipótese nula                         |   F (α₁)  |  p-valor  |   F (α₂)  |  p-valor  |
-|---------------------------------------|-----------|-----------|-----------|-----------|
-| H₀: trig = 0 dado poly — F(6, n-13)  |  834,10   |   ≈ 0     |  974,34   |   ≈ 0     |
-| H₀: poly = 0 dado trig — F(6, n-13)  |   27,14   |   ≈ 0     |   39,49   |   ≈ 0     |
+| Hipótese nula                        | F (α₁) | p-valor | F (α₂) | p-valor |
+| ------------------------------------- | -------- | ------- | -------- | ------- |
+| H₀: trig = 0 dado poly — F(6, n-13) | 834,10   | ≈ 0    | 974,34   | ≈ 0    |
+| H₀: poly = 0 dado trig — F(6, n-13) | 27,14    | ≈ 0    | 39,49    | ≈ 0    |
 
 Ambos os conjuntos acrescentam além do outro — mas a contribuição
 trigonométrica é **31× maior** que a polinomial em α₁ (834 vs 27).
@@ -121,24 +153,24 @@ trigonométrica é **31× maior** que a polinomial em α₁ (834 vs 27).
 
 #### α₁
 
-| Feature    |    β      |   p-valor  |
-|------------|-----------|------------|
-| sin θ₁     | +9,1436   |   ≈ 0      |
-| sin θ₂     | +8,2276   |   ≈ 0      |
-| θ₁·ω₁      | +0,2077   |  1,5e-56   |
-| cos θ₂     | −0,7154   |  3,4e-04   |
-| θ₂·ω₂      | +0,1173   |  8,2e-22   |
+| Feature    | β       | p-valor |
+| ---------- | -------- | ------- |
+| sin θ₁   | +9,1436  | ≈ 0    |
+| sin θ₂   | +8,2276  | ≈ 0    |
+| θ₁·ω₁ | +0,2077  | 1,5e-56 |
+| cos θ₂   | −0,7154 | 3,4e-04 |
+| θ₂·ω₂ | +0,1173  | 8,2e-22 |
 
 #### α₂
 
-| Feature    |    β      |   p-valor  |
-|------------|-----------|------------|
-| sin θ₂     | −30,7586  |   ≈ 0      |
-| sin θ₁     | −7,3630   |  1,1e-48   |
-| cos θ₁     | +5,7106   |  1,4e-22   |
-| θ₁·ω₁      | −0,4086   |  7,0e-38   |
-| cos θ₂     | +2,0178   |  3,1e-05   |
-| θ₂·ω₂      | +0,1489   |  5,0e-07   |
+| Feature    | β        | p-valor |
+| ---------- | --------- | ------- |
+| sin θ₂   | −30,7586 | ≈ 0    |
+| sin θ₁   | −7,3630  | 1,1e-48 |
+| cos θ₁   | +5,7106   | 1,4e-22 |
+| θ₁·ω₁ | −0,4086  | 7,0e-38 |
+| cos θ₂   | +2,0178   | 3,1e-05 |
+| θ₂·ω₂ | +0,1489   | 5,0e-07 |
 
 ---
 
@@ -154,7 +186,9 @@ significa que sin(θ) é ortogonal a qualquer função par — em particular,
 $\hat\alpha^2$ (par) e sin(θ) têm produto interno aproximadamente zero
 em distribuições simétricas.
 
-$$\int_{-\pi}^{\pi} \sin(\theta) \cdot \theta^2 \, d\theta = 0$$
+$$
+\int_{-\pi}^{\pi} \sin(\theta) \cdot \theta^2 \, d\theta = 0
+$$
 
 O RESET com $\hat\alpha^2$ é cego à estrutura senoidal por essa ortogonalidade.
 O RESET com $\hat\alpha^3$ (ímpar) captura a estrutura e rejeita com F = 724.
@@ -175,14 +209,14 @@ da análise cega.
 
 ### 3.3 Decisão estatística consolidada
 
-| Critério                     |       α₁      |       α₂      | Julgamento         |
-|------------------------------|---------------|---------------|--------------------|
-| RESET p=2  (par)             | não rejeita   | não rejeita   | Estrutura par ausente |
-| RESET p=3  (ímpar)           | rejeita ✓     | rejeita ✓     | Estrutura ímpar presente |
-| R²_aux trig / R²_aux poly    | 42×           | 37×           | Trig domina amplamente |
-| F(trig \| poly)               | 834           | 974           | Trig significativo |
-| F(poly \| trig)               | 27            | 39            | Poly marginal      |
-| **H₁ confirmada**            | **Sim ✓**    | **Sim ✓**    | Trigonométrica     |
+| Critério                   | α₁             | α₂             | Julgamento                |
+| --------------------------- | ---------------- | ---------------- | ------------------------- |
+| RESET p=2  (par)            | não rejeita     | não rejeita     | Estrutura par ausente     |
+| RESET p=3  (ímpar)         | rejeita ✓       | rejeita ✓       | Estrutura ímpar presente |
+| R²_aux trig / R²_aux poly | 42×             | 37×             | Trig domina amplamente    |
+| F(trig\| poly)              | 834              | 974              | Trig significativo        |
+| F(poly\| trig)              | 27               | 39               | Poly marginal             |
+| **H₁ confirmada**    | **Sim ✓** | **Sim ✓** | Trigonométrica           |
 
 ---
 
@@ -190,12 +224,12 @@ da análise cega.
 
 ### 4.1 O que cada etapa é
 
-| Aspecto           | Formulação                              | Validação                                    |
-|-------------------|-----------------------------------------|----------------------------------------------|
-| Ponto de partida  | Padrão sigmoidal observado nos resíduos | RESET p=2 vs p=3, regressão auxiliar         |
-| Pergunta          | "A estrutura parece trigonométrica?"    | "A estrutura é ímpar? Quanto explica?"       |
-| Ferramenta        | Inspeção visual do gráfico de resíduos  | F-parcial, R²_aux, F aninhado                |
-| Resultado         | Suspeita qualitativa                    | Confirmação com distribuição F(q, n-k) explícita |
+| Aspecto          | Formulação                               | Validação                                           |
+| ---------------- | ------------------------------------------ | ----------------------------------------------------- |
+| Ponto de partida | Padrão sigmoidal observado nos resíduos  | RESET p=2 vs p=3, regressão auxiliar                 |
+| Pergunta         | "A estrutura parece trigonométrica?"      | "A estrutura é ímpar? Quanto explica?"              |
+| Ferramenta       | Inspeção visual do gráfico de resíduos | F-parcial, R²_aux, F aninhado                        |
+| Resultado        | Suspeita qualitativa                       | Confirmação com distribuição F(q, n-k) explícita |
 
 ### 4.2 O que a validação acrescenta à formulação
 

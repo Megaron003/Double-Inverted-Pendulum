@@ -149,7 +149,7 @@ $\omega(t+1)$ como alvo, não sobre $\alpha(t)$.
 | PACF[1] de ω₁ | 0,9915        | 0,9885             |
 | PACF[1] de ω₂ | 0,9930        | 0,9880             |
 
-A PACF lag-1 é alta em ambos os modelos — isso será interpretado na seção seguinte.
+A PACF lag-1 é alta em ambos os modelos, o qual será interpretado na seção seguinte.
 
 ---
 
