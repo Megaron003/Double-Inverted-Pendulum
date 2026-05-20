@@ -1,4 +1,4 @@
-# Validação de H4 — A Não-Linearidade é Trigonométrica?
+# Validação de HN-B — A Não-Linearidade é Trigonométrica?
 
 ## Pêndulo Invertido Duplo
 
@@ -220,7 +220,7 @@ da análise cega.
 
 ---
 
-## 4. Distinção entre Formulação e Validação de H4
+## 4. Distinção entre Formulação e Validação de HN-B
 
 ### 4.1 O que cada etapa é
 

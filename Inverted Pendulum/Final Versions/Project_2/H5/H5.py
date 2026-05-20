@@ -17,7 +17,7 @@
 ║  H₁': β_cosθ₂ ≠ 0  dado sin θ₂                                           ║
 ║                                                                          ║
 ║  IMPLICAÇÃO ARQUITETURAL                                                 ║
-║  sin θ₂ domina → a gravidade (F_grav ∝ sin θ) é o acoplamento           ║
+║  sin θ₂ domina → a gravidade (F_grav ∝ sin θ) é o acoplamento            ║
 ║  principal. A rede precisa capturar sin θ₂ explicitamente.               ║
 ║  cos θ₂ marginal → inércia e centrifugação são efeitos secundários.      ║
 ╚══════════════════════════════════════════════════════════════════════════╝

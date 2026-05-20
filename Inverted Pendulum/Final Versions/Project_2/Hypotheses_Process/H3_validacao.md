@@ -1,4 +1,4 @@
-# Validação de HN-A — A Dinâmica é Markoviana?
+# Validação de H3 — A Dinâmica é Markoviana?
 
 ## Pêndulo Invertido Duplo
 
